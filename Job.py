@@ -6,7 +6,8 @@ class Job():
         for i in self.configure.index:   #LOT_ID、OPE_NO... to object
             setattr(self, i, self.configure[i])
         self.processTime = eqp_recipe[eqp_recipe["RECIPE"] == self.configure["RECIPE"]] #一張表 #filter to recipe #Y8000
-        self.canRunMachine={}
+        self.canRunMachine=[]
+        self.canRunMachine_num =0
         self.generate_canrunM()
         self.arrive_time= float(self.configure["ARRIV_T"])
 
@@ -23,15 +24,18 @@ class Job():
             textArr.append(text[(len(textArr)*lenth):])
             return textArr
 
-        cut_canrunmachine=cut_text(allM,6)[:-1] #長度6 多餘-1
-        one_prob=1/len(cut_canrunmachine)
-        keys=[]
-        for i in range(1,len(cut_canrunmachine)+1):
-            keys.append(one_prob*i)
-        self.canRunMachine = dict(zip(keys, cut_canrunmachine))
+        self.canRunMachine=cut_text(allM,6)[:-1] #長度6 多餘-1
+        #print(self.canRunMachine)
+        self.canRunMachine_num = len(self.canRunMachine)
+        #print(self.canRunMachine_num)
+        # one_prob=1/len(cut_canrunmachine)
+        # keys=[]
+        # for i in range(1,len(cut_canrunmachine)+1):
+        #     keys.append(one_prob*i)
+        # self.canRunMachine = dict(zip(keys, cut_canrunmachine))
 
         return self.canRunMachine
-        
+
     #
     def set_probability(self, probabilities): #probabilities=[選機,排序]
         self.probability=probabilities #set prob
@@ -54,5 +58,11 @@ class Job():
 
     def get_end_time(self):
         return self.endTime
-    
-    
+
+
+import pandas as pd
+wip = pd.read_excel("./semiconductor_data(30lot).xlsx", sheet_name=2, dtype=str)
+eqp = pd.read_excel("./semiconductor_data(30lot).xlsx", sheet_name=0, dtype=str)
+jobs = []
+for i in range(len(wip.values)): #job len (100)
+    jobs.append(Job(wip.iloc[i], eqp))    

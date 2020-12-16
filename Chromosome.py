@@ -3,29 +3,37 @@ import numpy as np
 from copy import deepcopy
 
 class Chromosome():
-    def __init__(self,size=0):
-        self.probability=[]
-        self.size = size
-        self.generate_probability()
-
+    def __init__(self,jobs):
+        self.gene=[]
+        self.jobs = jobs
+   
+        self.generate_gene()
         self.makespan=0
         self.tardiness_num=0
-
         self.target_value=0
 
     def __str__(self): #須為字串str
-        return self.probability
+        return self.gene
 
     def get_probability(self, index): #return [選機,排序]
         
-        if len(self.probability) > 0 and self.size + index < len(self.probability):
-            return self.probability[index], self.probability[self.size + index]
+        if len(self.gene) > 0 and len(self.jobs) + index < len(self.gene):
+            return self.gene[index], self.gene[len(self.jobs) + index]
 
-    def generate_probability(self):
- 
-        for i in range(self.size * 2): #
-            self.probability.append(random.random())  
-        return self.probability
+    def generate_gene(self):
+
+        # MS
+        for i in range(len(self.jobs)): #
+            size=range(1,self.jobs[i].canRunMachine_num+1)  #染色體大小 #10+10(0~19)  #1~100 
+            one_gene=random.sample(size, 1) 
+            self.gene.append(one_gene[0])
+        # OS
+        size=range(1,len(self.jobs)+1) 
+        OS_gene=random.sample(size,len(self.jobs)) 
+        self.gene.extend(OS_gene)
+        print(self.gene)
+        return self.gene
+
 
     def clear_values(self):
         self.makespan=0
@@ -123,7 +131,4 @@ def rank_selection_get_select_index(proba_list,rank_selection_num):
             select_index.append(temp)
     
     return select_index
-
-
-
 

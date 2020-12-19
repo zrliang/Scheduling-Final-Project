@@ -100,20 +100,36 @@ def Crossover(parent_list,offspring_list,population_size,jobs_size,crossover_rat
 
 
 # Mutation
-def mutation(population_size,offspring_list,mutation_rate,jobs_size):
-
+def mutation(population_size,offspring_list,mutation_rate,jobs):
+    jobs_size = len(jobs)
     s=list(np.random.permutation(population_size)) #[0,2,3,1]
     #print(s)
     for m in range(len(offspring_list)):
             mutation_prob=np.random.rand()
             if mutation_rate >= mutation_prob:
-                
-                size=range(0,jobs_size*2)  #染色體大小 #10+10(0~19)  #1~100 
-                # #test
-                # size=range(0,6)  #0-5  #6666666666666666666666
-                one_gene=random.sample(size, 1) 
-                #print("第",m+1,"次",one_gene[0])
-                offspring_list[s[m]].probability[one_gene[0]] = random.random()
+                # MS
+                r= int(jobs_size/2)
+                size=range(0,jobs_size)  
+                choose_gene=random.sample(size, r) 
+                choose_gene.sort()
+                #print("原本:",offspring_list[s[m]].gene)
+                for i in range(len(choose_gene)):
+                    canRunMachine_size=range(1,jobs[choose_gene[i]].canRunMachine_num + 1)
+                    new_gene = offspring_list[s[m]].gene[choose_gene[i]]
+                    while new_gene == offspring_list[s[m]].gene[choose_gene[i]]:
+                        new_gene=random.sample(canRunMachine_size, 1)[0]
+                    #print("新:",new_gene)
+                    offspring_list[s[m]].gene[choose_gene[i]] = new_gene
+
+                #print("MS後:",offspring_list[s[m]].gene)
+                #offspring_list[s[m]].gene[one_gene[0]] = random.random()
+
+                # OS
+                size=range(jobs_size,jobs_size*2)  
+                SwappingPoint=random.sample(size, 2)
+                #print(SwappingPoint)
+                offspring_list[s[m]].gene[SwappingPoint[0]],offspring_list[s[m]].gene[SwappingPoint[1]] = offspring_list[s[m]].gene[SwappingPoint[1]],offspring_list[s[m]].gene[SwappingPoint[0]]
+                #print("OS後:",offspring_list[s[m]].gene)
 
     return offspring_list
 

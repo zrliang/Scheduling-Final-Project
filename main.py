@@ -22,7 +22,7 @@ tool = pd.read_excel("./semiconductor_data(10lot).xlsx", sheet_name=1, dtype=str
 setup_time = pd.read_excel("./semiconductor_data(10lot).xlsx", sheet_name=3, index_col=0) #index can sue
 
 # Selection setting (roulette_wheel) 
-population_size=2  #66
+population_size=1  #66
 num_iteration =1
 crossover_rate=1    #66
 mutation_rate=1     #66
@@ -43,26 +43,26 @@ chromosomes = []
 for i in range(population_size):
     chromosomes.append(Chromosome(jobs)) #input ()
 
+# # create machines
+# machines=[]
+# for i in range(len(tool.values)):
+#     machines.append(Machine(tool.iloc[i]))
+
 parent_list = deepcopy(chromosomes)
 offspring_list= deepcopy(chromosomes)
 
 #------------------------Crossover------------------------------------
 offspring_list = Crossover(parent_list,offspring_list,population_size,len(jobs),crossover_rate)
 
-for i in range(2):
-    print(parent_list[i].gene)
+# for i in range(2):
+#     print(parent_list[i].gene)
 
-for i in range(2):
-    print(offspring_list[i].gene)
+# for i in range(2):
+#     print(offspring_list[i].gene)
 
 #------------------------Mutation------------------------------------
-# offspring_list = mutation(population_size,offspring_list,mutation_rate,len(jobs))
+offspring_list = mutation(population_size,offspring_list,mutation_rate,jobs)
 
-
-# # create machines
-# machines=[]
-# for i in range(len(tool.values)):
-#     machines.append(Machine(tool.iloc[i]))
 
 # #--------------------------------------------------
 

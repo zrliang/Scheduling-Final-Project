@@ -12,9 +12,10 @@ class Job():
         self.arrive_time= float(self.configure["ARRIV_T"])
 
         self.machineID = ''  #var
+        self.order = 0  #var
         self.startTime = 0 #var
         self.endTime = 0 #var
-        self.probability = []
+        self.genes = []
 
     def generate_canrunM(self):
         allM=self.configure["CANRUN_TOOL"]
@@ -27,27 +28,19 @@ class Job():
         self.canRunMachine=cut_text(allM,6)[:-1] #長度6 多餘-1
         #print(self.canRunMachine)
         self.canRunMachine_num = len(self.canRunMachine)
-        #print(self.canRunMachine_num)
-        # one_prob=1/len(cut_canrunmachine)
-        # keys=[]
-        # for i in range(1,len(cut_canrunmachine)+1):
-        #     keys.append(one_prob*i)
-        # self.canRunMachine = dict(zip(keys, cut_canrunmachine))
 
         return self.canRunMachine
 
     #
-    def set_probability(self, probabilities): #probabilities=[選機,排序]
-        self.probability=probabilities #set prob
-        m_probability = probabilities[0]
-        last  = 0
-        for key in self.canRunMachine.keys():
-            if m_probability > last and m_probability < key:
-                self.machineID = self.canRunMachine[key]
-                break
-            else:
-                last = key   
-        return self.machineID,self.probability
+    def set_gene(self, genes): #genes=[選機,排序]
+        self.genes = genes 
+        # set machine
+        self.machineID = self.canRunMachine[self.genes[0]-1]
+        # set order
+        self.order = self.genes[1]
+ 
+        return self.machineID,self.genes
+
 
     def set_start_time(self, time):
         self.startTime = self.arrive_time
@@ -60,9 +53,9 @@ class Job():
         return self.endTime
 
 
-import pandas as pd
-wip = pd.read_excel("./semiconductor_data(30lot).xlsx", sheet_name=2, dtype=str)
-eqp = pd.read_excel("./semiconductor_data(30lot).xlsx", sheet_name=0, dtype=str)
-jobs = []
-for i in range(len(wip.values)): #job len (100)
-    jobs.append(Job(wip.iloc[i], eqp))    
+# import pandas as pd
+# wip = pd.read_excel("./semiconductor_data(30lot).xlsx", sheet_name=2, dtype=str)
+# eqp = pd.read_excel("./semiconductor_data(30lot).xlsx", sheet_name=0, dtype=str)
+# jobs = []
+# for i in range(len(wip.values)): #job len (100)
+#     jobs.append(Job(wip.iloc[i], eqp))    

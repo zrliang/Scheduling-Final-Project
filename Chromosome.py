@@ -30,7 +30,7 @@ class Chromosome():
 
         return self.gene
 
-    def get_probability(self, index): #return [選機,排序]
+    def get_gene(self, index): #return [選機,排序]
         
         if len(self.gene) > 0 and len(self.jobs) + index < len(self.gene):
             return self.gene[index], self.gene[len(self.jobs) + index]
@@ -133,45 +133,24 @@ def mutation(population_size,offspring_list,mutation_rate,jobs):
 
     return offspring_list
 
-# rank_selection
+# Tournament_selection
 
-def rank_selection_get_proba_list(rank_selection_size):
+def Tournament_selection_get_select_index(sorted_total_chromosomes,rank_selection_num,population_size,elite_selection_size):
 
-    def sum(num): #分母
-        sum = 0
-        x=1
-        while x < num+1:
-            sum = sum + x
-            x+=1
-        return sum
-    Sum=sum(rank_selection_size) #1+2+..+18
-
-    t=0
-    proba_list=[0]
-    for i in range(rank_selection_size-1):
-        proba=(rank_selection_size-i)/Sum #90/1+...
-        t+=proba
-        proba_list.append(t)
-    
-    return proba_list
-
-def rank_selection_get_select_index(proba_list,rank_selection_num):
-
-    def getk2(): #得index
-        selectone=random.random()
-        k2=-1
-        for i in range(len(proba_list)):
-            if(selectone>proba_list[i]):
-                k2+=1
-        return k2
+    size=range(elite_selection_size,population_size*2)  
+    choosegenlist=random.sample(size, rank_selection_num*2)
 
     select_index=[]
-    count=0
-    while(len(select_index)<rank_selection_num): #不重複 #40個
-        count+=1
-        temp=getk2()
-        if(temp not in select_index):
-            select_index.append(temp)
-    
+    for m in range(rank_selection_num): #8
+        t1= sorted_total_chromosomes[choosegenlist[2*m]].target_value
+        t2= sorted_total_chromosomes[choosegenlist[2*m+1]].target_value
+        # print(t1,choosegenlist[2*m])
+        # print(t2,choosegenlist[2*m+1])
+        # print("-----")
+        if t1 < t2:
+            select_index.append(choosegenlist[2*m])
+        else:
+            select_index.append(choosegenlist[2*m+1])
+        # print(select_index)
     return select_index
 

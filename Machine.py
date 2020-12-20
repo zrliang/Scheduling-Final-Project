@@ -19,8 +19,8 @@ class Machine(object):
     
 
     def sort_job(self):
-        self.sorted_jobs = sorted(self.jobs, key=lambda e:e.probability[1], reverse = True) #二維排序(x[1]針對 jobs物件 的prob[1]) 由大到小
-        #self.sorted_jobs = sorted(self.jobs, key=lambda e:float(e.R_QT), reverse = False) #二維排序(x[1]針對 jobs物件 的prob[1]) 用R_QT
+        self.sorted_jobs = sorted(self.jobs, key=lambda e:e.order, reverse = False) #二維排序(x[1]針對 jobs物件 的prob[1]) 由大到小
+        
 
     def calculate_process_time(self,setuptime_Table):
         currentTime = int(self.configure["RECOVER_TIME"])

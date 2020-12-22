@@ -12,18 +12,19 @@ import datetime
 from copy import deepcopy
 import time
 
+pt=float(input("欲執行秒數:")) #input
 start_import = time.process_time()
 
 # ------------initialization setting-------------
 # import data
-wip = pd.read_excel("./semiconductor_data(10lot).xlsx", sheet_name=2, dtype=str)
-eqp = pd.read_excel("./semiconductor_data(10lot).xlsx", sheet_name=0, dtype=str)
-tool = pd.read_excel("./semiconductor_data(10lot).xlsx", sheet_name=1, dtype=str)
+wip = pd.read_excel("./semiconductor_data(30lot).xlsx", sheet_name=2, dtype=str)
+eqp = pd.read_excel("./semiconductor_data(30lot).xlsx", sheet_name=0, dtype=str)
+tool = pd.read_excel("./semiconductor_data(30lot).xlsx", sheet_name=1, dtype=str)
 setup_time = pd.read_excel("./semiconductor_data(30lot).xlsx", sheet_name=3, index_col=0) #index can sue
 
 # Selection setting (roulette_wheel) 
-population_size=6 #66
-num_iteration =10
+population_size=50 #66
+num_iteration =1000
 crossover_rate=1    #66
 mutation_rate=1     #66
 
@@ -146,11 +147,17 @@ for x in range(num_iteration):
         #print(sorted_total_chromosomes[j].makespan,sorted_total_chromosomes[j].tardiness_num,sorted_total_chromosomes[j].target_value)
 
 
-    print("------")
-    for i in range(len(chromosomes)):
-        print(chromosomes[i].target_value)
+    #print("------")
+    # for i in range(len(chromosomes)):
+    #     print(chromosomes[i].target_value)
     #收斂圖record
     MakespanRecord.append(chromosomes[0].target_value)
+
+    end_import = time.process_time()
+    process_import=end_import-start_import
+    if(process_import>=pt): #1秒
+        print("共執行:",x+1,"代")
+        break
   
 # -----------------Result----------------------
 
@@ -183,10 +190,8 @@ print("tardiness=",chromosomes[0].tardiness_num)
 print("makespan=",chromosomes[0].makespan)
 print("target_value=",chromosomes[0].target_value)
 
-end_import = time.process_time()
-process_import=end_import-start_import
 
-print("執行時間:",process_import)
+#print("執行時間:",process_import)
 
 #收斂圖
 # "%d" %i

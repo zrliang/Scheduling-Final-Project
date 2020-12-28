@@ -17,14 +17,14 @@ start_import = time.process_time()
 
 # ------------initialization setting-------------
 # import data
-wip = pd.read_excel("./semiconductor_data(30lot).xlsx", sheet_name=2, dtype=str)
-eqp = pd.read_excel("./semiconductor_data(30lot).xlsx", sheet_name=0, dtype=str)
-tool = pd.read_excel("./semiconductor_data(30lot).xlsx", sheet_name=1, dtype=str)
-setup_time = pd.read_excel("./semiconductor_data(30lot).xlsx", sheet_name=3, index_col=0) #index can sue
+wip = pd.read_excel("./semiconductor_data.xlsx", sheet_name=2, dtype=str)
+eqp = pd.read_excel("./semiconductor_data.xlsx", sheet_name=0, dtype=str)
+tool = pd.read_excel("./semiconductor_data.xlsx", sheet_name=1, dtype=str)
+setup_time = pd.read_excel("./semiconductor_data.xlsx", sheet_name=3, index_col=0) #index can sue
 
 # Selection setting (roulette_wheel) 
 population_size=50 #66
-num_iteration =1000
+num_iteration =10000
 crossover_rate=1    #66
 mutation_rate=1     #66
 
@@ -50,36 +50,6 @@ for i in range(population_size):
 machines=[]
 for i in range(len(tool.values)):
     machines.append(Machine(tool.iloc[i]))
-
-# #--------------------------------------------------------------------
-# for k in range(len(total_chromosomes)):
-#     total_chromosomes[k].clear_values()
-
-#     print(total_chromosomes[k].gene)
-#     # job action
-#     for j in range(len(jobs)):
-#         jobs[j].set_gene(total_chromosomes[k].get_gene(j)) 
-#         #print(jobs[j].machineID)
-#         #print(jobs[j].order)
-
-#     # machine action
-#     for i in range(len(machines)):
-#         machines[i].add_job(jobs)
-#         machines[i].sort_job()     
-#         machines[i].calculate_process_time(setup_time)     
-
-#         # record makespan & tardiness_num
-#         # record makespan
-#         if machines[i].endTime > total_chromosomes[k].makespan :
-#             total_chromosomes[k].makespan=machines[i].endTime
-#         # record tardiness_num
-#         for j in range(len(machines[i].sorted_jobs)): 
-#             if  machines[i].sorted_jobs[j].startTime > float(machines[i].sorted_jobs[j].R_QT)*60:
-#                 total_chromosomes[k].tardiness_num+=1
-
-#         machines[i].clear_job()            
-
-
 
 # #--------------------------------------------------
 
@@ -110,10 +80,14 @@ for x in range(num_iteration):
         for i in range(len(machines)):
             machines[i].add_job(jobs)
             machines[i].sort_job()     
-            machines[i].calculate_process_time(setup_time)     
-
+            machines[i].calculate_process_time(setup_time)  
+            #print(i+1)
+            # for j in range(len(machines[i].jobs)):
+            #     print(machines[i].jobs[j].LOT_ID)
+            
             # record makespan & tardiness_num
             # record makespan
+            #print(total_chromosomes[k].makespan)
             if machines[i].endTime > total_chromosomes[k].makespan :
                 total_chromosomes[k].makespan=machines[i].endTime
             # record tardiness_num
@@ -130,7 +104,7 @@ for x in range(num_iteration):
     for t in range(len(total_chromosomes)):
         #print(total_chromosomes[t].makespan,total_chromosomes[t].tardiness_num)
         total_chromosomes[t].target_value= 0.01* total_chromosomes[t].makespan + 0.99*total_chromosomes[t].tardiness_num
-       # print(total_chromosomes[t].target_value)
+        #print(total_chromosomes[t].target_value)
 
     #排序，依target_value
     sorted_total_chromosomes = sorted(total_chromosomes, key=lambda e:e.target_value, reverse = False) #小到大
@@ -147,9 +121,11 @@ for x in range(num_iteration):
         #print(sorted_total_chromosomes[j].makespan,sorted_total_chromosomes[j].tardiness_num,sorted_total_chromosomes[j].target_value)
 
 
-    #print("------")
+    # print("------")
     # for i in range(len(chromosomes)):
-    #     print(chromosomes[i].target_value)
+    #     print(chromosomes[i].makespan)
+
+    # print("------")    
     #收斂圖record
     MakespanRecord.append(chromosomes[0].target_value)
 

@@ -39,7 +39,7 @@ class Job():
         # set order
         self.order = self.genes[1]
  
-        return self.machineID,self.genes
+        return self.machineID,self.order
 
 
     def set_start_time(self, time):
@@ -53,9 +53,4 @@ class Job():
         return self.endTime
 
 
-# import pandas as pd
-# wip = pd.read_excel("./semiconductor_data(30lot).xlsx", sheet_name=2, dtype=str)
-# eqp = pd.read_excel("./semiconductor_data(30lot).xlsx", sheet_name=0, dtype=str)
-# jobs = []
-# for i in range(len(wip.values)): #job len (100)
-#     jobs.append(Job(wip.iloc[i], eqp))    
+

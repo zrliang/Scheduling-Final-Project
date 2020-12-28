@@ -22,6 +22,7 @@ class Chromosome():
             size=range(1,self.jobs[i].canRunMachine_num+1)  #染色體大小 #10+10(0~19)  #1~100 
             one_gene=random.sample(size, 1) 
             self.gene.append(one_gene[0])
+
         # OS
         size=range(1,len(self.jobs)+1) 
         OS_gene=random.sample(size,len(self.jobs)) 
@@ -32,15 +33,13 @@ class Chromosome():
 
     def get_gene(self, index): #return [選機,排序]
         
-        if len(self.gene) > 0 and len(self.jobs) + index < len(self.gene):
-            return self.gene[index], self.gene[len(self.jobs) + index]
+        #if len(self.gene) > 0 and len(self.jobs) + index < len(self.gene):
+        return self.gene[index], self.gene[len(self.jobs) + index]
 
 
     def clear_values(self):
         self.makespan=0
         self.tardiness_num=0
-
-
 
 
 # Crossover
@@ -128,7 +127,7 @@ def mutation(population_size,offspring_list,mutation_rate,jobs):
                 size=range(jobs_size,jobs_size*2)  
                 SwappingPoint=random.sample(size, 2)
                 #print(SwappingPoint)
-                offspring_list[s[m]].gene[SwappingPoint[0]],offspring_list[s[m]].gene[SwappingPoint[1]] = offspring_list[s[m]].gene[SwappingPoint[1]],offspring_list[s[m]].gene[SwappingPoint[0]]
+                offspring_list[s[m]].gene[SwappingPoint[0]],offspring_list[s[m]].gene[SwappingPoint[1]] = offspring_list[s[m]].gene[SwappingPoint[1]] ,offspring_list[s[m]].gene[SwappingPoint[0]]
                 #print("OS後:",offspring_list[s[m]].gene)
 
     return offspring_list

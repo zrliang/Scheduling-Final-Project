@@ -49,7 +49,7 @@ def Crossover(parent_list,offspring_list,population_size,jobs_size,crossover_rat
     #s=[0,1,2,3]
     for m in range(int(population_size/2)): #2
         crossover_prob=np.random.rand()
-        if crossover_rate>=crossover_prob: 
+        if crossover_rate >= crossover_prob: 
             parent1= deepcopy(parent_list[s[2*m]].gene)
             parent2= deepcopy(parent_list[s[2*m+1]].gene)
 
